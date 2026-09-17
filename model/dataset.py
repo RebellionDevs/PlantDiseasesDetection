@@ -25,25 +25,29 @@ test_transform = transforms.Compose([
 ])
 
 def load_data(data_dir="./data", batch_size=32, train_ratio=0.8):
+    train_dataset = datasets.ImageFolder(root=data_dir, transform=train_transform)
+    test_dataset = datasets.ImageFolder(root=data_dir, transform=test_transform)
 
-    dataset = datasets.ImageFolder(root=data_dir)
-    class_names = dataset.classes
+    class_names = train_dataset.classes
 
-    train_size = int(train_ratio * len(dataset))
-    test_size = len(dataset) - train_size
+    train_size = int(train_ratio * len(train_dataset))
+    test_size = len(train_dataset) - train_size
 
-    train_set, test_set = random_split(
-        dataset,
+    train_set, _ = random_split(
+        train_dataset,
         [train_size, test_size],
         generator=torch.Generator().manual_seed(42)
     )
 
-    train_set.dataset.transform = train_transform
+    _, test_set = random_split(
+        test_dataset,
+        [train_size, test_size],
+        generator=torch.Generator().manual_seed(42)
+    )
 
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2)
 
-    print(f"All: {len(dataset)}")
     print(f"{len(class_names)} : {class_names}")
 
     return train_loader, test_loader, class_names
