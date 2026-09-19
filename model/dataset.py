@@ -48,9 +48,4 @@ def load_data(data_dir="./data", batch_size=32, train_ratio=0.8):
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2)
 
-    print(f"{len(class_names)} : {class_names}")
-
     return train_loader, test_loader, class_names
-
-if __name__ == "__main__":
-    train_loader, test_loader, class_names = load_data()
