@@ -64,7 +64,6 @@ def main():
     
     os.makedirs(WEIGHTS_DIR, exist_ok=True)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Используемое устройство: {device}")
 
     train_loader, test_loader, class_names = load_data(data_dir=DATA_DIR, batch_size=BATCH_SIZE)
 
@@ -84,7 +83,7 @@ def main():
 
         if val_acc > best_acc:
             best_acc = val_acc
-            save_path = os.path.join(WEIGHTS_DIR, "best_model.pth")
+            save_path = os.path.join(WEIGHTS_DIR, "model.pth")
             torch.save({
                 'model_state_dict': model.state_dict(),
                 'class_names': class_names
